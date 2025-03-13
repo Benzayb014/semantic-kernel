@@ -48,18 +48,19 @@ from semantic_kernel.exceptions import (
     VectorStoreInitializationException,
     VectorStoreOperationException,
 )
-from semantic_kernel.utils.experimental_decorator import experimental_class
+from semantic_kernel.utils.feature_stage_decorator import experimental
 
 logger: logging.Logger = logging.getLogger(__name__)
 
+TKey = TypeVar("TKey", bound=str)
 TModel = TypeVar("TModel")
 
 
-@experimental_class
+@experimental
 class MongoDBAtlasCollection(
-    VectorSearchBase[str, TModel],
+    VectorSearchBase[TKey, TModel],
     VectorizedSearchMixin[TModel],
-    Generic[TModel],
+    Generic[TKey, TModel],
 ):
     """MongoDB Atlas collection implementation."""
 

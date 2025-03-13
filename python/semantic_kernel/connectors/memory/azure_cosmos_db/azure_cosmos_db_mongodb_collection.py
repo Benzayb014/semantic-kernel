@@ -4,9 +4,7 @@ import logging
 import sys
 from collections.abc import AsyncIterable
 from importlib import metadata
-from typing import Any, TypeVar
-
-from semantic_kernel.utils.telemetry.user_agent import SEMANTIC_KERNEL_USER_AGENT
+from typing import Any, Generic, TypeVar
 
 if sys.version_info >= (3, 12):
     from typing import override  # pragma: no cover
@@ -38,15 +36,17 @@ from semantic_kernel.exceptions.vector_store_exceptions import (
     VectorSearchExecutionException,
     VectorStoreModelDeserializationException,
 )
-from semantic_kernel.utils.experimental_decorator import experimental_class
+from semantic_kernel.utils.feature_stage_decorator import experimental
+from semantic_kernel.utils.telemetry.user_agent import SEMANTIC_KERNEL_USER_AGENT
 
 logger: logging.Logger = logging.getLogger(__name__)
 
+TKey = TypeVar("TKey", bound=str)
 TModel = TypeVar("TModel")
 
 
-@experimental_class
-class AzureCosmosDBforMongoDBCollection(MongoDBAtlasCollection):
+@experimental
+class AzureCosmosDBforMongoDBCollection(MongoDBAtlasCollection[TKey, TModel], Generic[TKey, TModel]):
     """Azure Cosmos DB for MongoDB collection."""
 
     def __init__(
